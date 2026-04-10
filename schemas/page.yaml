@@ -1,13 +1,16 @@
 # Schema: Page Settings
-# Defines page-level configuration (title, subtitle, placeholder text).
+# Defines page-level configuration (title, subtitle, welcome text).
 # The assistant uses this when the user wants to change how a page
-# is labelled or described, e.g., "change the research page heading."
+# is labelled or what its intro text says.
 
 trigger_phrases:
   - change the page title
   - update the heading
   - change the subtitle
   - rename the page
+  - change the welcome text
+  - I don't like that language
+  - change it to say
 
 fields:
   title:
@@ -27,6 +30,11 @@ fields:
     required: false
     ask_user: false
     note: "Used for pages with no content yet (e.g., Teaching)."
+
+note: >
+  The user may not say "change the page title." They may say "I don't
+  like the language on the contact page" or "change 'Get in touch' to
+  something else." Recognize these as page-level text changes.
 
 outputs:
   - file: "data/pages/{page-name}.yaml"

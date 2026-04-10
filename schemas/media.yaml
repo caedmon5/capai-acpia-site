@@ -1,6 +1,6 @@
 # Schema: Media / News Item
 # Defines what a media entry needs. The assistant uses this when the
-# user says "add a news item," "one of our members was in the news," etc.
+# user wants to add or manage news items and press mentions.
 
 trigger_phrases:
   - add a news item
@@ -9,25 +9,40 @@ trigger_phrases:
   - press coverage
   - add media
   - article about
+  - one of our members was in
+  - here's an article
+  - someone wrote about
+
+update_triggers:
+  - change the description
+  - update the link
+  - fix the title
+  - change the image
+
+remove_triggers:
+  - take that article down
+  - remove that news item
+  - that's outdated
 
 fields:
   title:
     type: string
     required: true
     ask_user: true
-    prompt: "What's the title of the article or piece?"
+    prompt: "What's the title of the article?"
 
   source:
     type: string
     required: true
     ask_user: true
-    prompt: "Where was it published? (e.g., CBC News, Substack, university press)"
+    prompt: "Where was it published?"
+    examples: "CBC News, Substack, university press, Globe and Mail"
 
   description:
     type: text
     required: false
     ask_user: true
-    prompt: "Can you give a one- or two-sentence summary?"
+    prompt: "What's it about, in a sentence or two?"
 
   url:
     type: url

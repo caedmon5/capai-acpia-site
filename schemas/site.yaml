@@ -10,6 +10,20 @@ trigger_phrases:
   - edit the intro text
   - add a nav item
   - change navigation
+  - reorder the menu
+  - change the order
+  - I want events first
+  - move media before
+  - add a page to the menu
+  - remove a page from the menu
+
+nav_triggers:
+  - I want the order to be
+  - move X before Y
+  - put events first
+  - add a contact page
+  - I want members, research, teaching, events, media
+  - change the menu
 
 fields:
   name:
@@ -26,6 +40,8 @@ fields:
     type: url
     required: true
     prompt: "URL for the header logo?"
+    note: >
+      For logo replacement, just ask for the new logo file or URL.
 
   footer_logo:
     type: url
@@ -49,6 +65,15 @@ fields:
       HTML file it links to, without .html). Adding a nav item also
       means there should be a matching template and page config.
 
+      When the user asks to reorder: they may list the order they want
+      ("I want members, research, teaching, events, media, contact")
+      or say relative things ("put events first," "move media before
+      teaching"). Parse their intent and reorder the nav list in
+      data/site.yaml accordingly.
+
+      When adding a new nav item: create the page data file, ensure
+      a template exists, and add it to the build script if needed.
+
   contacts:
     type: list
     note: "Each contact has a name and email."
@@ -57,6 +82,8 @@ fields:
 coherence_checks:
   - "If a nav item is added, verify a matching template and page data file exist."
   - "If a contact is removed, verify they aren't the only contact."
+  - "If a nav item is removed, check if any other pages link to it."
+  - "If nav order changes, rebuild all pages (the nav appears on every page)."
 
 outputs:
   - file: "data/site.yaml"

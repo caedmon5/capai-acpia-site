@@ -1,6 +1,6 @@
 # Schema: Member
 # Defines what a member entry needs. The assistant uses this when the
-# user says anything like "add a new member," "someone joined," etc.
+# user wants to add, update, or remove members.
 
 trigger_phrases:
   - add a member
@@ -8,6 +8,21 @@ trigger_phrases:
   - someone joined
   - add a person
   - add to the team
+  - new person
+
+update_triggers:
+  - change their title
+  - update their bio
+  - new photo for
+  - change their affiliation
+  - they moved to
+  - update their links
+
+remove_triggers:
+  - remove a member
+  - take them off
+  - they left
+  - they're no longer
 
 fields:
   name:
@@ -32,7 +47,10 @@ fields:
     type: image
     required: false
     ask_user: true
-    prompt: "Do you have a photo? (URL or file)"
+    prompt: "Do you have a photo?"
+    note: >
+      Accept URL or file path. If file, save to images/ directory.
+      For replacement: just ask for the new photo and swap it.
 
   order:
     type: integer
@@ -50,11 +68,14 @@ fields:
       linkedin: "#"
     note: >
       Use placeholder "#" values by default. If the user provides
-      actual profile URLs, use those instead.
+      actual profile URLs, use those instead. The user may say
+      "add John's Twitter" or "here's her LinkedIn" — just add or
+      update the relevant link.
 
 coherence_checks:
   - "If removing a member, check if they are a speaker for any upcoming event."
   - "If removing a member, check if they are listed as a contact in site.yaml."
+  - "If changing a member's name, check if they are referenced as a speaker in any event."
 
 outputs:
   - file: "data/members/{firstname-lastname}.yaml"

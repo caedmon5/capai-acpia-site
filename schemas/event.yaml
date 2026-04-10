@@ -1,23 +1,50 @@
-# Schema: Event / Talk
+# Schema: Event / Talk / Workshop
 # Defines what an event page needs. The assistant uses this to guide
-# the conversation when a user says anything like "add a talk,"
-# "schedule a lecture," "we have a speaker coming," etc.
+# the conversation when a user wants to add, update, or manage events.
 
 trigger_phrases:
   - add a talk
   - add an event
   - add a lecture
+  - add a workshop
   - schedule a speaker
   - new event
   - upcoming talk
   - we have someone presenting
+  - we have someone coming
+
+update_triggers:
+  - change the date
+  - change the title
+  - change the speaker
+  - change the location
+  - moved online
+  - moved to zoom
+  - change the time
+  - update the event
+  - new abstract
+  - here's the abstract
+  - here's a bio
+  - here's a photo
+
+lifecycle_triggers:
+  - take it down
+  - it's over
+  - move to past
+  - promote the next one
+  - event happened
+  - that one's done
+  - archive it
 
 fields:
   slug:
     type: string
     required: true
     ask_user: false
-    derive_from: speaker name (lowercase, hyphenated)
+    derive_from: >
+      For single-speaker events, derive from speaker name (e.g., frank-onuh).
+      For workshops or multi-speaker events, derive from title
+      (e.g., contemporary-debates-philosophy-ai). Always lowercase, hyphenated.
     example: frank-onuh
 
   title:
@@ -34,12 +61,20 @@ fields:
     required: true
     ask_user: false
     default: "CAPAI-ACPIA Speaker Series"
+    note: >
+      Use "CAPAI-ACPIA Workshop" for workshops. If the user describes
+      something that isn't a standard talk (workshop, panel, conference),
+      adjust accordingly.
 
   speaker:
     type: string
-    required: true
+    required: false
     ask_user: true
     prompt: "Who's the speaker?"
+    note: >
+      Not required for workshops or multi-speaker events. For workshops,
+      use "TBA" or list organizers. For panels, list panelists or say
+      "Multiple speakers."
 
   speaker_title:
     type: string
@@ -57,8 +92,11 @@ fields:
     type: image
     required: false
     ask_user: true
-    prompt: "Do you have a photo of the speaker? (file path or URL)"
-    note: Save to images/ if provided as a file.
+    prompt: "Do you have a photo of the speaker?"
+    note: >
+      If a file is provided, save to images/ directory.
+      If a URL is provided, use it directly.
+      For photo replacement: just ask for the new photo and swap it.
 
   date:
     type: string
@@ -67,9 +105,9 @@ fields:
     prompt: "What date?"
     format: "Day-of-week, Month DD, YYYY (e.g., Thursday, April 10, 2026)"
     validation: >
-      If the user says something relative like "next Thursday," convert
-      it to a full date and confirm: "That would be Thursday, April 17 —
-      does that look right?"
+      If the user says something relative like "next Thursday" or
+      "May 1," convert to full date and confirm: "That would be
+      Friday, May 1, 2026 — does that look right?"
 
   time:
     type: string
@@ -77,6 +115,9 @@ fields:
     ask_user: true
     prompt: "What time?"
     example: "3:00 PM"
+    note: >
+      For all-day or multi-hour events like workshops, use range format:
+      "9:30 AM - 5:00 PM"
 
   location:
     type: string
@@ -85,7 +126,8 @@ fields:
     prompt: "Where is it being held?"
     note: >
       For online events, use "Virtual (Zoom)" or similar.
-      For in-person, include room/building info.
+      For in-person, include room/building and university:
+      "Leacock Room 927, McGill University"
 
   format:
     type: string
@@ -133,8 +175,8 @@ fields:
     type: text
     required: false
     ask_user: true
-    prompt: "Do you have an abstract or description of the talk? Even a sentence or two is fine."
-    if_missing: "Use 'Abstract coming soon.' as placeholder text."
+    prompt: "Do you have an abstract or description? Even a sentence or two is fine."
+    if_missing: "Use 'Details coming soon.' as placeholder text."
 
   bio:
     type: text
@@ -149,6 +191,23 @@ coherence_checks:
   - "If date changes, verify day-of-week is correct."
   - "If speaker changes, verify bio, photo, title, and affiliation match."
   - "If status changes to past, check if featured should shift to another event."
+  - "If a new event is added that is sooner than the current featured event, suggest swapping."
+
+lifecycle:
+  move_to_past:
+    description: >
+      When an event's date has passed, or user says "take it down" / "it's done":
+      1. Change status from "upcoming" to "past"
+      2. Set featured to false
+      3. Check: is there another upcoming event that should now be featured?
+      4. If yes, set that one to featured and tell the user:
+         "I've moved it to past events and put [next event] on the homepage."
+      5. If no upcoming events remain, tell the user:
+         "That was the last upcoming event — the homepage won't show a
+         featured event until you add a new one."
+  proactive:
+    - "If an event's date has passed but status is still 'upcoming', mention it."
+    - "If the homepage has no featured event, suggest one."
 
 outputs:
   - file: "data/events/{slug}.yaml"

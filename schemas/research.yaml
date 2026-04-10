@@ -1,6 +1,6 @@
 # Schema: Research Item
 # Defines what a research entry needs. The assistant uses this when the
-# user says "post a paper," "add a publication," "new research item," etc.
+# user wants to add, update, or manage research/publications.
 
 trigger_phrases:
   - add a paper
@@ -8,44 +8,87 @@ trigger_phrases:
   - new research
   - add research
   - share a paper
+  - I've got a paper
+  - here's a paper
+  - here's a DOI
+  - new paper by
+  - add this publication
+
+update_triggers:
+  - change the description
+  - update the link
+  - fix the title
+
+bulk_triggers:
+  - I've got several papers
+  - I have a bunch of papers
+  - I've got like 12 more
+  - add these papers
 
 fields:
   title:
     type: string
     required: true
     ask_user: true
-    prompt: "What's the title of the paper or publication?"
+    prompt: "What's the title of the paper?"
+    note: >
+      If the user provides a DOI, fetch the metadata and extract
+      the title automatically. Confirm with the user: "I found:
+      [title] by [authors] — is that right?"
+
+  authors:
+    type: string
+    required: false
+    ask_user: false
+    note: >
+      Not currently displayed in templates, but stored for reference.
+      Extract from DOI metadata if available.
 
   type:
     type: string
     required: false
-    ask_user: true
-    prompt: "What type is it?"
+    ask_user: false
     default: "Research Paper"
+    logic: >
+      Derive from DOI metadata when possible. Use "Conference Paper"
+      for conference proceedings, "Book Chapter" for book chapters, etc.
+      Don't ask the user unless the type is ambiguous.
     examples:
       - Research Paper
+      - Conference Paper
       - Book Chapter
       - Working Paper
-      - Conference Paper
 
   description:
     type: text
     required: true
     ask_user: true
-    prompt: "Can you give a brief description — a sentence or two about what it covers?"
+    prompt: "Do you have a description or abstract?"
+    note: >
+      If a DOI is provided, try to fetch the abstract from metadata.
+      If the abstract is very long, use it but the template will
+      handle display truncation.
+    if_missing: "Ask for even a one-sentence description."
 
   url:
     type: url
     required: false
     ask_user: true
-    prompt: "Is there a link to the PDF or publication page?"
+    prompt: "Is there a link to the paper?"
+    note: >
+      If a DOI is provided, construct the URL as https://doi.org/{DOI}
+      or use the publisher URL from metadata. Check if the URL actually
+      resolves — some publishers block automated fetches, which is fine,
+      the link will still work for humans.
 
   url_label:
     type: string
     required: false
     ask_user: false
-    default: "Download PDF"
-    logic: "Use 'Read Article' for web links, 'Download PDF' for PDFs."
+    default: "View Paper"
+    note: >
+      Use "View Paper" for all research items (this was a user preference
+      established in session — keep it consistent across all entries).
 
   order:
     type: integer
@@ -53,7 +96,33 @@ fields:
     ask_user: false
     logic: "Set to one higher than the current highest order value."
 
+doi_workflow:
+  description: >
+    When the user provides a DOI (e.g., "10.1145/3306618.3314238"):
+    1. Try to fetch metadata from https://doi.org/{DOI} with Accept header
+       for application/json or text/bibliography
+    2. Extract: title, authors, publication type, abstract, URL
+    3. If fetch fails (many publishers block bots), tell the user:
+       "I couldn't pull the details automatically — what's the title?"
+    4. Confirm what you found: "I found: [title] by [authors] — adding
+       it now."
+    5. If the user provides the abstract separately, use that.
+
+bulk_workflow:
+  description: >
+    When the user says they have multiple papers to add:
+    1. Say: "Great — you can send them one at a time, or give me a list
+       of DOIs and I'll look them all up."
+    2. Process each one, confirming as you go.
+    3. If several, batch the confirmations: "I've added all three.
+       Here's what's on the research page now: [list titles]."
+
+consistency:
+  - "All button labels should say 'View Paper' (user preference)."
+  - "If abstract display looks inconsistent (different lengths), the template handles truncation, not the data."
+
 outputs:
   - file: "data/research/{short-name}.yaml"
   - pages_affected:
       - "research.html"
+      - "index.html (sidebar shows recent research)"
