@@ -32,7 +32,7 @@
       <img src="{{ site.footer_logo }}" alt="{{ site.short_name }}">
     </div>
     {% if site.contacts %}
-    <h3 style="color:var(--clr-white); margin-bottom:.75rem;">Contact us</h3>
+    <h3 class="footer-heading">Contact us</h3>
     <div class="footer-contact">
       {% for c in site.contacts %}
       {{ c.name }}: <a href="mailto:{{ c.email }}">{{ c.email }}</a>{% if not loop.last %}<br>{% endif %}

@@ -20,56 +20,54 @@
         <span><strong>Location:</strong> {{ event.location }}{% if event.format %} ({{ event.format | lower }}){% endif %}</span>
       </div>
 
-      <!-- Inline event poster -->
-      <div style="background:#1e1e1e; position:relative; overflow:hidden; max-width:700px; margin-bottom:1.5rem;">
-        <div style="height:5px; background:#cf291e;"></div>
-        <div style="display:grid; grid-template-columns:1fr 220px; min-height:400px;">
-          <div style="padding:36px 30px 30px 40px; display:flex; flex-direction:column; justify-content:space-between;">
+      <!-- Event poster card -->
+      <div class="poster-card">
+        <div class="poster-accent-bar"></div>
+        <div class="poster-grid">
+          <div class="poster-content">
             <div>
-              <div style="font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#cf291e; margin-bottom:20px;">{{ event.series }}</div>
-              <div style="font-size:32px; font-weight:700; color:#fff; line-height:1.15; margin-bottom:12px;">{{ event.title }}</div>
-              <div style="width:80px; height:3px; background:#cf291e; margin-bottom:16px;"></div>
-              <div style="font-size:17px; font-weight:500; color:#fff; margin-bottom:4px;">{{ event.speaker }}</div>
-              <div style="font-size:13px; color:#999; margin-bottom:20px;">{{ event.speaker_title }}{% if event.speaker_affiliation %}<br>{{ event.speaker_affiliation }}{% endif %}</div>
-              <div style="font-size:13px; color:#bbb; line-height:1.6;">{{ event.abstract | truncate(120) }}</div>
+              <div class="poster-series">{{ event.series }}</div>
+              <div class="poster-title">{{ event.title }}</div>
+              <div class="poster-divider"></div>
+              <div class="poster-speaker">{{ event.speaker }}</div>
+              <div class="poster-speaker-info">{{ event.speaker_title }}{% if event.speaker_affiliation %}<br>{{ event.speaker_affiliation }}{% endif %}</div>
+              <div class="poster-abstract">{{ event.abstract | truncate(120) }}</div>
             </div>
-            <div style="background:rgba(207,41,30,.08); border-left:3px solid #cf291e; padding:14px 16px; margin-top:20px; font-size:13px; color:#ddd; line-height:1.8;">
-              <span style="color:#cf291e; font-weight:600;">Date</span> &nbsp;{{ event.date }}<br>
-              <span style="color:#cf291e; font-weight:600;">Time</span> &nbsp;{{ event.time }}<br>
-              <span style="color:#cf291e; font-weight:600;">Location</span> &nbsp;{{ event.location }}<br>
-              <span style="color:#cf291e; font-weight:600;">Format</span> &nbsp;{{ event.format }}
+            <div class="poster-details">
+              <span class="poster-detail-label">Date</span> &nbsp;{{ event.date }}<br>
+              <span class="poster-detail-label">Time</span> &nbsp;{{ event.time }}<br>
+              <span class="poster-detail-label">Location</span> &nbsp;{{ event.location }}<br>
+              <span class="poster-detail-label">Format</span> &nbsp;{{ event.format }}
             </div>
           </div>
           {% if event.speaker_photo %}
-          <div style="display:flex; align-items:center; justify-content:center; padding-right:20px;">
-            <div style="position:relative;">
-              <div style="position:absolute; width:200px; height:200px; border-radius:50%; border:1px solid rgba(207,41,30,.2); top:50%; left:50%; transform:translate(-50%,-50%);"></div>
-              <img src="{{ event.speaker_photo }}" alt="{{ event.speaker }}" style="width:170px; height:170px; border-radius:50%; object-fit:cover; border:4px solid #cf291e; position:relative; z-index:1;">
-            </div>
+          <div class="poster-photo-container">
+            <div class="poster-photo-ring"></div>
+            <img src="{{ event.speaker_photo }}" alt="{{ event.speaker }}" class="poster-photo">
           </div>
           {% endif %}
         </div>
-        <div style="padding:12px 40px 14px; display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:11px; color:#555;">{{ site.name }}</span>
-          <span style="font-size:10px; color:#cf291e; border:1px solid rgba(207,41,30,.3); padding:3px 8px; letter-spacing:1px; text-transform:uppercase; font-weight:600;">{{ event.format }}</span>
+        <div class="poster-footer">
+          <span class="poster-org">{{ site.name }}</span>
+          <span class="poster-format-badge">{{ event.format }}</span>
         </div>
       </div>
 
-      <h4 style="margin-bottom:.5rem;">Abstract</h4>
+      <h4 class="subsection-title">Abstract</h4>
       <p>{{ event.abstract }}</p>
 
       {% if event.bio %}
-      <h4 style="margin-top:1.5rem; margin-bottom:.5rem;">About the Speaker</h4>
-      <div style="display:flex; gap:1.25rem; align-items:flex-start; margin-top:.75rem;">
+      <h4 class="subsection-title-spaced">About the Speaker</h4>
+      <div class="speaker-bio">
         {% if event.speaker_photo %}
-        <img src="{{ event.speaker_photo }}" alt="{{ event.speaker }}" style="width:120px; height:120px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+        <img src="{{ event.speaker_photo }}" alt="{{ event.speaker }}" class="speaker-photo">
         {% endif %}
         <p>{{ event.bio }}</p>
       </div>
       {% endif %}
 
       {% if event.registration_url %}
-      <p style="margin-top:1.5rem;">
+      <p class="mt-1-5">
         <a href="{{ event.registration_url }}" class="btn btn-primary">Register on Zoom</a>
       </p>
       {% endif %}

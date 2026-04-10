@@ -15,11 +15,11 @@
       {% for item in research_items %}
       <div class="card">
         <div class="card-body">
-          <span style="display:inline-block; background:var(--clr-accent); color:white; font-size:.75rem; padding:.2rem .6rem; border-radius:4px; margin-bottom:.75rem;">{{ item.type }}</span>
+          <span class="badge">{{ item.type }}</span>
           <h3>{{ item.title }}</h3>
-          <p style="margin-top:.5rem;">{{ item.description }}</p>
+          <p class="mt-half">{{ item.description }}</p>
           {% if item.url %}
-          <p style="margin-top:1rem;">
+          <p class="mt-1">
             <a href="{{ item.url }}" class="btn btn-primary">{{ item.url_label | default("View") }}</a>
           </p>
           {% endif %}
