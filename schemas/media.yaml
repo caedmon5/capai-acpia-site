@@ -1,0 +1,59 @@
+# Schema: Media / News Item
+# Defines what a media entry needs. The assistant uses this when the
+# user says "add a news item," "one of our members was in the news," etc.
+
+trigger_phrases:
+  - add a news item
+  - media mention
+  - in the news
+  - press coverage
+  - add media
+  - article about
+
+fields:
+  title:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What's the title of the article or piece?"
+
+  source:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "Where was it published? (e.g., CBC News, Substack, university press)"
+
+  description:
+    type: text
+    required: false
+    ask_user: true
+    prompt: "Can you give a one- or two-sentence summary?"
+
+  url:
+    type: url
+    required: true
+    ask_user: true
+    prompt: "What's the link?"
+
+  url_label:
+    type: string
+    required: false
+    ask_user: false
+    default: "Read Article"
+
+  image:
+    type: image
+    required: false
+    ask_user: false
+    note: "Only ask if the user mentions one. Otherwise omit."
+
+  order:
+    type: integer
+    required: true
+    ask_user: false
+    logic: "Set to one higher than the current highest order value."
+
+outputs:
+  - file: "data/media/{short-name}.yaml"
+  - pages_affected:
+      - "media.html"

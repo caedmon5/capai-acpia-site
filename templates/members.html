@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} &ndash; {{ site.short_name }}{% endblock %}
+
+{% block content %}
+<div class="hero">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.subtitle }}</p>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="card-grid cols-2">
+      {% for m in members %}
+      <div class="member-card">
+        <img src="{{ m.photo }}" alt="{{ m.name }}">
+        <div>
+          <h3>{{ m.name }}</h3>
+          <div class="title">{{ m.title }}</div>
+          <div class="affiliation">{{ m.affiliation }}</div>
+          {% if m.links %}
+          <div class="social-links">
+            {% for label, url in m.links.items() %}
+            <a href="{{ url }}">{{ label | capitalize }}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

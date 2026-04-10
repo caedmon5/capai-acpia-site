@@ -1,0 +1,59 @@
+# Schema: Research Item
+# Defines what a research entry needs. The assistant uses this when the
+# user says "post a paper," "add a publication," "new research item," etc.
+
+trigger_phrases:
+  - add a paper
+  - post a publication
+  - new research
+  - add research
+  - share a paper
+
+fields:
+  title:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What's the title of the paper or publication?"
+
+  type:
+    type: string
+    required: false
+    ask_user: true
+    prompt: "What type is it?"
+    default: "Research Paper"
+    examples:
+      - Research Paper
+      - Book Chapter
+      - Working Paper
+      - Conference Paper
+
+  description:
+    type: text
+    required: true
+    ask_user: true
+    prompt: "Can you give a brief description — a sentence or two about what it covers?"
+
+  url:
+    type: url
+    required: false
+    ask_user: true
+    prompt: "Is there a link to the PDF or publication page?"
+
+  url_label:
+    type: string
+    required: false
+    ask_user: false
+    default: "Download PDF"
+    logic: "Use 'Read Article' for web links, 'Download PDF' for PDFs."
+
+  order:
+    type: integer
+    required: true
+    ask_user: false
+    logic: "Set to one higher than the current highest order value."
+
+outputs:
+  - file: "data/research/{short-name}.yaml"
+  - pages_affected:
+      - "research.html"

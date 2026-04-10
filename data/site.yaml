@@ -1,0 +1,36 @@
+name: Canadian Association for the Philosophy of AI
+short_name: CAPAI-ACPIA
+logo: https://i0.wp.com/capai-acpia.ca/wp-content/uploads/2026/04/JustLogo.png?fit=1197%2C282&ssl=1
+footer_logo: https://capai-acpia.ca/wp-content/uploads/2026/04/LOGO-CAPAI_WEB_2-1-1024x445.png
+
+intro:
+  en: >
+    We are the Canadian Association for the Philosophy of Artificial Intelligence.
+    Our association was established in 2025 by Martina Orlandi (Trent University)
+    and Nicholas Dunn (University of Lethbridge).
+  fr: >
+    Nous sommes l'Association canadienne pour la philosophie de l'intelligence
+    artificielle. Notre association a été fondée en 2025 par Martina Orlandi
+    (Trent University) et Nicholas Dunn (University of Lethbridge).
+
+nav:
+  - label: Home
+    page: index
+  - label: Members
+    page: members
+  - label: Events
+    page: events
+  - label: Research
+    page: research
+  - label: Teaching
+    page: teaching
+  - label: Media
+    page: media
+  - label: Contact
+    page: contact
+
+contacts:
+  - name: Nicholas Dunn
+    email: nicholas.dunn@uleth.ca
+  - name: Martina Orlandi
+    email: martinaorlandi@trentu.ca

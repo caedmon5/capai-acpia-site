@@ -1,0 +1,62 @@
+# Schema: Member
+# Defines what a member entry needs. The assistant uses this when the
+# user says anything like "add a new member," "someone joined," etc.
+
+trigger_phrases:
+  - add a member
+  - new member
+  - someone joined
+  - add a person
+  - add to the team
+
+fields:
+  name:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What's their full name?"
+
+  title:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What's their title or position?"
+
+  affiliation:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What institution or organization are they with?"
+
+  photo:
+    type: image
+    required: false
+    ask_user: true
+    prompt: "Do you have a photo? (URL or file)"
+
+  order:
+    type: integer
+    required: true
+    ask_user: false
+    logic: "Set to one higher than the current highest order value."
+
+  links:
+    type: object
+    required: false
+    ask_user: false
+    default:
+      discord: "#"
+      github: "#"
+      linkedin: "#"
+    note: >
+      Use placeholder "#" values by default. If the user provides
+      actual profile URLs, use those instead.
+
+coherence_checks:
+  - "If removing a member, check if they are a speaker for any upcoming event."
+  - "If removing a member, check if they are listed as a contact in site.yaml."
+
+outputs:
+  - file: "data/members/{firstname-lastname}.yaml"
+  - pages_affected:
+      - "members.html"

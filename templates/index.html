@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ site.name }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>{{ site.name }}</h1>
+    <p>{{ site.intro.en }}</p>
+    <p style="margin-top:.75rem;"><em>{{ site.intro.fr }}</em></p>
+  </div>
+</section>
+
+<section>
+  <div class="container landing-grid">
+    <div class="landing-main">
+      <h2 class="section-title">About CAPAI-ACPIA</h2>
+      <p>
+        CAPAI-ACPIA brings together researchers, scholars, and students across Canada
+        who are working on philosophical questions raised by artificial intelligence.
+        We host talks, workshops, and collaborative research on topics ranging from
+        the ethics of machine learning to the foundations of computational cognition.
+      </p>
+      <p style="margin-top:1rem;">
+        Whether you work in philosophy, computer science, law, or any field that
+        intersects with AI — we welcome your participation.
+      </p>
+
+      <div style="margin-top:2.5rem;">
+        <h2 class="section-title">Get involved</h2>
+        <p>
+          Interested in presenting your work, joining the association, or just staying
+          in the loop? Visit our <a href="contact.html">contact page</a> or come to
+          one of our <a href="events.html">upcoming events</a>.
+        </p>
+      </div>
+    </div>
+
+    <aside class="landing-sidebar">
+      {% if featured_event %}
+      <div class="sidebar-box">
+        <h3 class="sidebar-heading">Upcoming Event</h3>
+        <div class="sidebar-label">{{ featured_event.series }}</div>
+        <h4 style="margin-bottom:.5rem;">{{ featured_event.title }}</h4>
+        <p class="sidebar-meta">{{ featured_event.speaker }}</p>
+        <p class="sidebar-meta">{{ featured_event.date }}</p>
+        <p class="sidebar-meta">{{ featured_event.time }}</p>
+        <p class="sidebar-meta" style="margin-bottom:1rem;">{{ featured_event.location }}</p>
+        <a href="event-{{ featured_event.slug }}.html" class="btn btn-accent" style="width:100%; text-align:center;">Event details</a>
+      </div>
+      {% endif %}
+
+      {% if upcoming_events %}
+      <div class="sidebar-box">
+        <h3 class="sidebar-heading">More Events</h3>
+        {% for ev in upcoming_events %}
+        {% if not ev.featured %}
+        <div style="margin-bottom:1rem;">
+          <a href="event-{{ ev.slug }}.html" style="font-weight:500;">{{ ev.title }}</a>
+          <p class="sidebar-meta">{{ ev.date }}</p>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <a href="events.html" style="font-size:.85rem;">View all events &rarr;</a>
+      </div>
+      {% endif %}
+
+      {% if research_items %}
+      <div class="sidebar-box">
+        <h3 class="sidebar-heading">Recent Research</h3>
+        {% for r in research_items[:3] %}
+        <div style="margin-bottom:1rem;">
+          <a href="{{ r.url }}" style="font-weight:500; font-size:.9rem;">{{ r.title }}</a>
+          <p class="sidebar-meta">{{ r.type }}</p>
+        </div>
+        {% endfor %}
+        <a href="research.html" style="font-size:.85rem;">View all research &rarr;</a>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

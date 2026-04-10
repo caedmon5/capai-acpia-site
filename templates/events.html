@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ page.title }} &ndash; {{ site.short_name }}{% endblock %}
+
+{% block content %}
+<div class="hero">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.subtitle }}</p>
+  </div>
+</div>
+
+{% if upcoming_events %}
+<section>
+  <div class="container">
+    <h2 class="section-title">Upcoming</h2>
+    {% for ev in upcoming_events %}
+    <div class="event-detail" style="margin-bottom:1.5rem;">
+      <h3><a href="event-{{ ev.slug }}.html">{{ ev.title }}</a></h3>
+      <div class="event-meta">
+        <span><strong>Speaker:</strong> {{ ev.speaker }}{% if ev.speaker_affiliation %}, {{ ev.speaker_affiliation }}{% endif %}</span><br>
+        <span><strong>Date:</strong> {{ ev.date }}</span><br>
+        <span><strong>Time:</strong> {{ ev.time }}</span><br>
+        <span><strong>Location:</strong> {{ ev.location }}{% if ev.format %} ({{ ev.format | lower }}){% endif %}</span>
+      </div>
+      {% if ev.poster_image %}
+      <img src="{{ ev.poster_image }}" alt="{{ ev.title }} poster" style="border-radius:var(--radius); margin-bottom:1.5rem; max-width:600px;">
+      {% endif %}
+      {% if ev.abstract %}
+      <h4 style="margin-bottom:.5rem;">Abstract</h4>
+      <p>{{ ev.abstract }}</p>
+      {% endif %}
+      {% if ev.bio %}
+      <h4 style="margin-top:1.5rem; margin-bottom:.5rem;">About the Speaker</h4>
+      <div style="display:flex; gap:1.25rem; align-items:flex-start; margin-top:.75rem;">
+        {% if ev.speaker_photo %}
+        <img src="{{ ev.speaker_photo }}" alt="{{ ev.speaker }}" style="width:100px; height:100px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+        {% endif %}
+        <p>{{ ev.bio }}</p>
+      </div>
+      {% endif %}
+      {% if ev.registration_url %}
+      <p style="margin-top:1.5rem;">
+        <a href="{{ ev.registration_url }}" class="btn btn-primary">Register on Zoom</a>
+      </p>
+      {% endif %}
+      <p style="margin-top:1rem;"><a href="event-{{ ev.slug }}.html" class="btn btn-primary">Event Details</a></p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Past Events</h2>
+    {% if past_events %}
+    {% for ev in past_events %}
+    <div class="event-detail" style="margin-bottom:1.5rem;">
+      <h3>{{ ev.title }}</h3>
+      <div class="event-meta">
+        <span><strong>Speaker:</strong> {{ ev.speaker }}</span><br>
+        <span><strong>Date:</strong> {{ ev.date }}</span>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p style="color:var(--clr-muted);">Past event recordings and summaries will be posted here.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

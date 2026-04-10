@@ -1,0 +1,34 @@
+# Schema: Page Settings
+# Defines page-level configuration (title, subtitle, placeholder text).
+# The assistant uses this when the user wants to change how a page
+# is labelled or described, e.g., "change the research page heading."
+
+trigger_phrases:
+  - change the page title
+  - update the heading
+  - change the subtitle
+  - rename the page
+
+fields:
+  title:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What should the page title be?"
+
+  subtitle:
+    type: string
+    required: false
+    ask_user: true
+    prompt: "And the subtitle underneath?"
+
+  placeholder:
+    type: string
+    required: false
+    ask_user: false
+    note: "Used for pages with no content yet (e.g., Teaching)."
+
+outputs:
+  - file: "data/pages/{page-name}.yaml"
+  - pages_affected:
+      - "{page-name}.html"

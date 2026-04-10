@@ -1,0 +1,64 @@
+# Schema: Site-wide Settings
+# Defines global site configuration. The assistant uses this when the
+# user wants to change site name, contacts, navigation, logos, or
+# the homepage intro text.
+
+trigger_phrases:
+  - change the site name
+  - update contact info
+  - change the logo
+  - edit the intro text
+  - add a nav item
+  - change navigation
+
+fields:
+  name:
+    type: string
+    required: true
+    prompt: "What should the full site name be?"
+
+  short_name:
+    type: string
+    required: true
+    prompt: "And the short version (used in page titles)?"
+
+  logo:
+    type: url
+    required: true
+    prompt: "URL for the header logo?"
+
+  footer_logo:
+    type: url
+    required: true
+    prompt: "URL for the footer logo?"
+
+  intro:
+    type: object
+    fields:
+      en:
+        type: text
+        prompt: "What should the English intro text say?"
+      fr:
+        type: text
+        prompt: "And the French version?"
+
+  nav:
+    type: list
+    note: >
+      Each item has a label (what the user sees) and a page (which
+      HTML file it links to, without .html). Adding a nav item also
+      means there should be a matching template and page config.
+
+  contacts:
+    type: list
+    note: "Each contact has a name and email."
+    prompt: "Who should be listed as contacts?"
+
+coherence_checks:
+  - "If a nav item is added, verify a matching template and page data file exist."
+  - "If a contact is removed, verify they aren't the only contact."
+
+outputs:
+  - file: "data/site.yaml"
+  - pages_affected:
+      - "All pages (header, footer, nav)"

@@ -1,0 +1,158 @@
+# Schema: Event / Talk
+# Defines what an event page needs. The assistant uses this to guide
+# the conversation when a user says anything like "add a talk,"
+# "schedule a lecture," "we have a speaker coming," etc.
+
+trigger_phrases:
+  - add a talk
+  - add an event
+  - add a lecture
+  - schedule a speaker
+  - new event
+  - upcoming talk
+  - we have someone presenting
+
+fields:
+  slug:
+    type: string
+    required: true
+    ask_user: false
+    derive_from: speaker name (lowercase, hyphenated)
+    example: frank-onuh
+
+  title:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What's the title of the talk?"
+    followup_if_vague: >
+      That sounds like a working title — should I use it as-is on the
+      website, or is there a final version coming?
+
+  series:
+    type: string
+    required: true
+    ask_user: false
+    default: "CAPAI-ACPIA Speaker Series"
+
+  speaker:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "Who's the speaker?"
+
+  speaker_title:
+    type: string
+    required: false
+    ask_user: true
+    prompt: "What's their title or position?"
+
+  speaker_affiliation:
+    type: string
+    required: false
+    ask_user: true
+    prompt: "What institution are they at?"
+
+  speaker_photo:
+    type: image
+    required: false
+    ask_user: true
+    prompt: "Do you have a photo of the speaker? (file path or URL)"
+    note: Save to images/ if provided as a file.
+
+  date:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What date?"
+    format: "Day-of-week, Month DD, YYYY (e.g., Thursday, April 10, 2026)"
+    validation: >
+      If the user says something relative like "next Thursday," convert
+      it to a full date and confirm: "That would be Thursday, April 17 —
+      does that look right?"
+
+  time:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "What time?"
+    example: "3:00 PM"
+
+  location:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "Where is it being held?"
+    note: >
+      For online events, use "Virtual (Zoom)" or similar.
+      For in-person, include room/building info.
+
+  format:
+    type: string
+    required: true
+    ask_user: true
+    prompt: "Is this in-person, online, or hybrid?"
+    options:
+      - In-person only
+      - Online
+      - Hybrid
+
+  status:
+    type: string
+    required: true
+    ask_user: false
+    default: upcoming
+    options:
+      - upcoming
+      - past
+
+  featured:
+    type: boolean
+    required: true
+    ask_user: false
+    default: false
+    logic: >
+      Set to true if this is the next upcoming event. Only one event
+      should be featured at a time. If setting this to true, set all
+      other events' featured to false.
+
+  registration_url:
+    type: url
+    required: false
+    ask_user: conditional
+    condition: "Only ask if format is Online or Hybrid"
+    prompt: "Do you have a registration or Zoom link?"
+
+  poster_image:
+    type: image
+    required: false
+    ask_user: false
+    note: Only add if user provides one.
+
+  abstract:
+    type: text
+    required: false
+    ask_user: true
+    prompt: "Do you have an abstract or description of the talk? Even a sentence or two is fine."
+    if_missing: "Use 'Abstract coming soon.' as placeholder text."
+
+  bio:
+    type: text
+    required: false
+    ask_user: true
+    prompt: "Do you have a short bio for the speaker?"
+    if_missing: "Construct a minimal one from speaker_title and speaker_affiliation."
+
+coherence_checks:
+  - "If title changes, verify abstract still describes the same topic."
+  - "If format changes, verify location and registration_url are consistent."
+  - "If date changes, verify day-of-week is correct."
+  - "If speaker changes, verify bio, photo, title, and affiliation match."
+  - "If status changes to past, check if featured should shift to another event."
+
+outputs:
+  - file: "data/events/{slug}.yaml"
+  - pages_affected:
+      - "event-{slug}.html (dedicated event page)"
+      - "events.html (listing)"
+      - "index.html (if featured)"

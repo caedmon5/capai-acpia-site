@@ -1,0 +1,20 @@
+title: "AI Extenders: The Ethical and Societal Implications of Humans Cognitively Extended by AI"
+type: Conference Paper
+description: >
+  Humans and AI systems are usually portrayed as separate systems that we need
+  to align in values and goals. However, there is a great deal of AI technology
+  found in non-autonomous systems that are used as cognitive tools by humans.
+  Under the extended mind thesis, the functional contributions of these tools
+  become as essential to our cognition as our brains. But AI can take cognitive
+  extension towards totally new capabilities, posing new philosophical, ethical
+  and technical challenges. To analyse these challenges better, we define and
+  place AI extenders in a continuum between fully-externalized systems, loosely
+  coupled with humans, and fully internalized processes, with operations
+  ultimately performed by the brain, making the tool redundant. We dissect the
+  landscape of cognitive capabilities that can foreseeably be extended by AI and
+  examine their ethical implications. We suggest that cognitive extenders using
+  AI be treated as distinct from other cognitive enhancers by all relevant
+  stakeholders, including developers, policy makers, and human users.
+url: https://dl.acm.org/doi/10.1145/3306618.3314238
+url_label: View Paper
+order: 2

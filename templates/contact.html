@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Contact — {{ site.short_name }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    <p>{{ page.subtitle }}</p>
+  </div>
+</section>
+
+<section>
+  <div class="container" style="max-width:700px;">
+    <p style="margin-bottom:2rem;">
+      Interested in getting involved? Write to us.
+    </p>
+    {% for c in site.contacts %}
+    <div style="background:var(--clr-white); border:1px solid var(--clr-border); border-left:4px solid var(--clr-accent); padding:1.5rem; margin-bottom:1rem;">
+      <h3 style="margin-bottom:.25rem;">{{ c.name }}</h3>
+      <a href="mailto:{{ c.email }}">{{ c.email }}</a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
