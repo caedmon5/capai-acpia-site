@@ -108,6 +108,7 @@ h1, h2, h3, h4 { color: var(--clr-accent); font-weight: 500; }
 /* ===== Section ===== */
 section { padding: 3rem 0; }
 section:nth-child(even) { background: var(--clr-surface); }
+section.hero { background: var(--clr-dark); }
 
 .section-title {
   font-size: 1.5rem;
